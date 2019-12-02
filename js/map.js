@@ -15,71 +15,34 @@ var universalvalor=1;
 var arr_point=[];
 var arr_point_radios=[];
 arr_point[0]=new google.maps.LatLng(-9.1054194,-78.563675);//CHIMBOTE
-arr_point[1]=new google.maps.LatLng(-7.6933833,-79.38357777777779);//MALABRIGO
-arr_point[2]=new google.maps.LatLng(-11.5792083,-77.26909444444445);//CHAMCAY
-arr_point[3]=new google.maps.LatLng(-10.8001917,-77.74585277777778);//SUPE
-arr_point[4]=new google.maps.LatLng(-12.0003056,-77.11521944444443);//CALLAO
-arr_point[5]=new google.maps.LatLng(-11.0056194,-77.64852777777779);//VEGUETA
-arr_point[6]=new google.maps.LatLng(-16.2332083,-73.69741111111111);//ATICO 1
-arr_point[7]=new google.maps.LatLng(-16.402125,-73.22045);//LA PLANCHADA
 
 arr_point_radios[0]=6437.38;//CHIMBOTE
-arr_point_radios[1]=1931.21//MALABRIGO
-arr_point_radios[2]=1609.34//CHAMCAY
-arr_point_radios[3]=724.2048//SUPE
-arr_point_radios[4]=6598.31//CALLAO
-arr_point_radios[5]=1287.48//VEGUETA
-arr_point_radios[6]=1609.34//ATICO 1
-arr_point_radios[7]=2414.02;//LA PLANCHADA
 //var radius = 2414.02;
 
-//GEOCERCA POLINOMIAL
-var arr_point_poligono=[];
-var poligonos=[];
-//PISCO
-arr_point_poligono[0]=
-[
-    {lat: -13.440925, lng: -76.23163611111111},
-    {lat: -13.4293167, lng: -76.16155},
-    {lat: -13.8250083, lng: -76.23479166666667},
-    {lat: -13.790875, lng: -76.28862777777778},
-    {lat: -13.440925, lng: -76.23163611111111}
-]; 
-//MATARANI
-arr_point_poligono[1]=
-[
-    {lat: -16.9774611, lng: -72.12498888888888},
-    {lat: -17.0191306, lng: -72.13337222222223},
-    {lat: -17.0397111, lng: -72.08549166666666},
-    {lat: -17.01915, lng: -72.05490277777777},
-    {lat: -16.9774611, lng: -72.12498888888888}
-];
-//MOLLENDO
-arr_point_poligono[2]=
-[
-    {lat: -17.0181333, lng: -72.049425},
-    {lat: -17.0229222, lng: -72.04934166666666},
-    {lat:-17.0295694, lng: -72.03677499999999},
-    {lat: -17.0270972, lng: -72.022825},
-    {lat: -17.0181333, lng: -72.049425}
-];
-//ILO 1 Y 2
-arr_point_poligono[3]=
-[
-    {lat: -17.5567778, lng: -71.36898333333333},
-    {lat: -17.7083444, lng: -71.42060000000001},
-    {lat: -17.7212361, lng: -71.33905},
-    {lat: -17.5604917, lng: -71.34313888888889},
-    {lat: -17.5567778, lng: -71.36898333333333}
-];
+
 
 var DentroTemp=[];
 var FueraTemp=[];
 
 var infowindow = new google.maps.InfoWindow({});
 function initialize() {
+
+    var coords = {};
+    navigator.geolocation.getCurrentPosition(position => {
+        console.log("position");
+        console.log(position.coords.latitude);
+        coords = {
+            lng: position.coords.longitude,
+            lat: position.coords.latitude
+          };
+          console.log("coords");
+          console.log(coords);
+      });
+      console.log("coords");
+console.log(coords);
+
     geocoder = new google.maps.Geocoder();
-    var latlng = new google.maps.LatLng(-547033, -4714356);
+    var latlng = new google.maps.LatLng(coords.lng,coords.lat);
     var myOptions = {
         zoom: 10,
         center: latlng,
@@ -104,17 +67,7 @@ function initialize() {
         });
     }
     
-    for(var i = 0; i < arr_point_poligono.length; i++){
-         var flightPath = new google.maps.Polyline({
-            path: arr_point_poligono[i],
-            geodesic: true,
-            strokeColor: '#FF0000',
-            strokeOpacity: 1.0,
-            strokeWeight: 2
-          });
-          poligonos.push(flightPath);
-          flightPath.setMap(map);
-    }
+  
     PonerTodos(); 
    var centerControlDiv = document.createElement('div');
     var centerControl = new CenterControl(centerControlDiv, map);
@@ -280,23 +233,7 @@ function addMarker(markers) {
                 infowindow.open(map, this);
             });  
         }
-        for(var i = 0; i < poligonos.length; i++){
-            for(var j = 0; j < markertemp.length; j++){
-                if (google.maps.geometry.poly.containsLocation(markertemp[i].getPosition(), poligonos[i])) {
-                    array_dentro_poli.push(markers_data[j]);
-                }else{
-                    if(array_fuera_Temp2.length==0){
-                        array_fuera_Temp2.push(markers_data[j]);
-                    }else{
-                        index1=array_fuera_Temp2.indexOf(markers_data[j]);
-                        if(index1==-1){
-                            array_fuera_Temp2.push(markers_data[j]);
-                        }
-                    }
-                   
-                }
-            }
-        }
+       
         
         
         for(var i = 0; i < array_fuera_Temp2.length; i++){
